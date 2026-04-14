@@ -1,0 +1,17 @@
+{% extends 'formato.html' %}
+
+{% block section %}
+
+<div class="card p-4">
+    <h4>Iniciar Sesión</h4>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button class="btn btn-primary">Ingresar</button>
+        <a href="{% url 'registro' %}">Crear cuenta</a>
+    </form>
+</div>
+
+{% endblock %}

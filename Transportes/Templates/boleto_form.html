@@ -1,0 +1,91 @@
+{% extends 'formato.html' %}
+
+{% block section %}
+
+<div class="container mt-5">
+
+    <div class="card">
+
+        <div class="card-header bg-success text-white text-center">
+            <h4 class="mb-0">Comprar Boleto</h4>
+        </div>
+
+        <div class="card-body">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert 
+                        {% if message.tags == 'error' %}
+                            alert-danger
+                        {% elif message.tags == 'success' %}
+                            alert-success
+                        {% endif %}
+                    ">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if request.session.boleto_id %}
+                <a href="{% url 'descargar_boleto' %}" class="btn btn-success mb-3">
+                    Descargar Boleto
+                </a>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <button class="btn btn-success">Comprar</button>
+                <a href="{% url 'viajes' %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+
+            <hr>
+
+            <h5>Seleccionar asiento</h5>
+
+            {% for item in info_viajes %}
+                <div class="card mb-3">
+                    <div class="card-body">
+
+                        <strong>{{ item.viaje }}</strong><br><br>
+
+                        {% for num in item.disponibles %}
+                            <button type="button" 
+                                    class="btn btn-success btn-sm m-1 asiento-btn"
+                                    data-asiento="{{ num }}">
+                                {{ num }}
+                            </button>
+                        {% endfor %}
+                        
+                        {% for num in item.ocupados %}
+                            <button type="button" 
+                                    class="btn btn-danger btn-sm m-1" disabled>
+                                {{ num }}
+                            </button>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            {% empty %}
+                <p>No hay viajes disponibles</p>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+    
+<script>
+    const botones = document.querySelectorAll('.asiento-btn');
+    const inputAsiento = document.querySelector('input[name="asiento"]');
+
+    botones.forEach(btn => {
+        btn.addEventListener('click', function() {
+            inputAsiento.value = this.dataset.asiento;
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'formato.html' %}
+
+{% block section %}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            Crear Viaje
+        </div>
+        <div class="card-body">
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <button class="btn btn-success">Guardar</button>
+                <a href="{% url 'viajes' %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
